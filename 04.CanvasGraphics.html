@@ -1,0 +1,227 @@
+<html>
+<head>
+	<title>JavaScript APIs - Canvas Graphics</title>
+</head>
+<body>
+	<canvas width="1000" height="600">
+		Canvas not supported
+	</canvas>
+	<script type="text/javascript">
+	(function () {
+    var ctx = document.getElementsByTagName("canvas")[0].getContext("2d");
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0, ctx.canvas.width,ctx.canvas.height);
+
+    //draw head
+    ctx.beginPath();
+   	ctx.fillStyle ="rgb(144,202,215)";
+	ctx.strokeStyle = "rgb(25,74,85)";
+	ctx.arc(150,100+50+40,40,0,2*Math.PI);
+	ctx.fill();
+	ctx.stroke();
+
+    //eys
+    ctx.beginPath(); ;
+    ellipse(ctx,160,182,10,5, 0, 2*Math.PI,false);
+    ctx.stroke();
+    ctx.beginPath(); ;
+    ellipse(ctx,155,182,1,3, 0, 2*Math.PI,false);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath()
+    ellipse(ctx,126,182,10,5, 0, 2*Math.PI,false);
+    ctx.stroke();
+    ctx.beginPath(); ;
+    ellipse(ctx,121,182,1,3, 0, 2*Math.PI,false);
+    ctx.fill();
+    ctx.stroke();
+
+    //nose
+    ctx.beginPath();
+    ctx.moveTo(140.5,182);
+    ctx.lineTo(132,202);
+    ctx.lineTo(142,202);
+    ctx.stroke();
+
+    //mouth
+    ctx.save(); // save state
+    ctx.rotate(12*Math.PI/180);
+    ctx.beginPath();
+    ctx.translate(165, 175);
+    ctx.scale(15, 4);
+    ctx.arc(1, 1, 1, 0, 2*Math.PI, false);
+    ctx.restore();
+    ctx.stroke();
+    // restore to original state
+
+    //drowing the hat
+    ctx.fillStyle ="rgb(57,102,147)";
+	ctx.strokeStyle = "black";
+
+    // lower ellipse of hat
+    // ellipse(context, cx, cy, rx, ry, start, end, clockwise)
+    // cx - x of the center of ellipse; 
+    // cy - y of the center of ellipse; 
+    // rx - x radius of ellipse;
+    // ry - y radius of elllipse;
+    // start-start angle
+    // end angle
+     ellipse(ctx,145,150+8,45,10, 0, 2*Math.PI,false);
+     
+    //body of hat
+    ctx.fillRect(125,100, 50,50);
+    ctx.moveTo(125,100);
+    ctx.lineTo(125,150);
+    ctx.moveTo(125+50,100);
+    ctx.lineTo(125+50,150);
+    ellipse(ctx,150,150,25,10, 0, 1*Math.PI,true);
+
+    
+    //upper ellipse of hat
+    // ellipse(context, cx, cy, rx, ry,start, end, clockwise) where 
+    ellipse(ctx,150,100,25,10, 0, 2*Math.PI,false);
+
+    //vechicle
+    //one wheel
+    ctx.beginPath();
+    ctx.fillStyle ="rgb(144,202,215)";
+    ctx.strokeStyle = "rgb(25,74,85)";
+    ctx.arc(100,350,40,0,2*Math.PI);
+    ctx.fill();
+    ctx.stroke();
+
+    //other wheel
+    ctx.beginPath();
+    ctx.fillStyle ="rgb(144,202,215)";
+    ctx.strokeStyle = "rgb(25,74,85)";
+    ctx.arc(280,350,40,0,2*Math.PI);
+    ctx.fill();
+    ctx.stroke();
+
+    //middle wheel
+    ctx.beginPath();
+    ctx.strokeStyle = "rgb(25,74,85)";
+    ctx.arc(170,350,12,0,2*Math.PI);
+    ctx.stroke();
+
+    //vehicle body
+    //from left wheel
+    ctx.moveTo(100,350);
+    //go to middle wheel
+    ctx.lineTo(170,350);
+    //to the seat
+    ctx.lineTo(135,280);
+    ctx.lineTo(115,280);
+    ctx.lineTo(155,280);
+    //frame level
+    ctx.moveTo(144,295);
+    //to left wheel
+    ctx.lineTo(100,350);
+    //level of frame
+    ctx.moveTo(144,295);
+    //move to right wheel
+    ctx.lineTo(270,295);
+    ctx.lineTo(170,350);
+    ctx.moveTo(265,270);
+    ctx.lineTo(280,350);
+    ctx.moveTo(233,280);
+    ctx.lineTo(265,270);
+    ctx.lineTo(285,245);
+    ctx.moveTo(178,358);
+    ctx.lineTo(187,368);
+    ctx.moveTo(162,340);
+    ctx.lineTo(155,330);
+    ctx.stroke();
+    ctx.save();
+
+    //house
+    ctx.save();
+    ctx.strokeStyle="black";
+    ctx.fillStyle = "rgb(151,91,91)";
+    ctx.fillRect(400,180, 200,150);
+    ctx.lineWidth=2;
+    ctx.strokeRect(400,180, 200,150);
+
+    //roof of the house
+    ctx.beginPath();
+    ctx.lineWidth=2;
+    ctx.moveTo(400,180);
+    ctx.lineTo(500,90);
+    ctx.lineTo(600,180);
+    ctx.lineTo(400,180);
+    ctx.fill();
+    ctx.stroke();
+    //chimney of the house
+    ctx.beginPath();
+    //ctx.lineWidth=2;
+    ctx.moveTo(540,160);
+    ctx.lineTo(540,110);
+    ctx.moveTo(558,160);
+    ctx.lineTo(558,110);
+    ctx.fillRect(540,110,18,50);
+    ctx.stroke();
+    ctx.lineWidth=1;
+    ellipse(ctx,549,110,9,2,2*Math.PI,0,false);
+
+    
+    //door
+    ctx.beginPath();
+    ctx.lineWidth=2;
+    ctx.moveTo(420,265);
+    ctx.lineTo(420,330);
+    ctx.moveTo(452,260);
+    ctx.lineTo(452,330);
+    ctx.moveTo(484,265);
+    ctx.lineTo(484,330);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.strokeStyle="black";
+    ctx.arc(445,305,3,0,2*Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(459,305,3,0,2*Math.PI);
+    ctx.stroke();
+    ellipse(ctx,452,265,34,10,1*Math.PI,0,false);
+
+    //windows
+    ctx.save();
+    ctx.strokeStyle="rgb(151,91,91)";
+    ctx.fillStyle = "black";
+    ctx.fillRect(415,195, 75,50);
+    ctx.fillRect(510,195, 75,50);
+    ctx.fillRect(510,260, 75,50);
+    //vertical lines
+    ctx.moveTo(452,195);
+    ctx.lineTo(452,245);
+    ctx.moveTo(547,195);
+    ctx.lineTo(547,245);
+    ctx.moveTo(547,260);
+    ctx.lineTo(547,310);
+    //horizontal lines
+    ctx.moveTo(415,220);
+    ctx.lineTo(490,220);
+    ctx.moveTo(510,220);
+    ctx.lineTo(585,220);
+    ctx.moveTo(510,285);
+    ctx.lineTo(585,285);
+    ctx.fill();
+    ctx.stroke();
+    
+    
+    function ellipse(context, cx, cy, rx, ry, start, end, clockwise){
+        context.save(); // save state
+        context.beginPath();
+        context.translate(cx-rx, cy-ry);
+        context.scale(rx, ry);
+        context.arc(1, 1, 1, start, end, false);
+        context.restore(); // restore to original state
+        context.fill();
+        context.stroke();
+}
+
+}());
+
+	</script>
+
+</body>
+</html>

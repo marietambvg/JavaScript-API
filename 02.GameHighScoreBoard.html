@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Drag and drop to trash</title>
+	<style type="text/css">
+		#trash{
+			margin-top: 10px;
+			position:absolute;
+			top:20px;
+			right:10px;
+			width:300px;
+			height:400px;
+
+		}
+		
+		section{
+			width:250px;
+			margin-top:5px;
+			padding:5px;
+			border-style: solid;
+			border-radius:15px;
+			text-align: left;
+			font-size: 15px;
+			color:blue;
+			font-family: Verdana;
+			font-style:italic;
+			font-weight: bold;
+			text-align: center;
+		}
+		#timer {
+			width: 250px;
+			margin-left: 10px;
+			color:blue;
+			text-align: center;
+			border: 2px solid blue;
+			border-radius: 10px;
+			font-size: 50px;
+		}
+		section#Results{
+			width:250px;
+			margin-top:20px;
+			display:block;
+			font-size:12px;
+			position:absolute;
+			top:420px;
+			right:20px;
+		}
+		section#Results table thead{
+			text-align: center;
+			color:red;
+			padding:15px;
+		}
+		section#Results table td{
+			text-align: center;
+			padding-left:15px;
+			padding-right:15px;
+		}
+
+	</style>
+	
+</head>
+<body>
+<div class="fb-send" data-href="http://example.com" data-colorscheme="dark" data-font="tahoma"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/bg_BG/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div id="timer">00:00:00</div>
+<section id="Game">
+	<p>This is a game! Try to clean all rubbishes as faster as you can!</p>
+	<p>Are you ready to start?</p>
+	<button onclick="onStartGameBtnClick()">Start game</button>
+</section>
+<section id="Results">
+	<table>
+		<thead>
+			<td>Place</td>
+			<td>Name</td>
+			<td>Score</td>
+		</thead>
+		<tbody>
+			<tr>
+				<td>1.</td>
+				<td>No winner yet</td>
+				<td>No first score yet</td>
+			</tr>
+		</tbody>
+	</table>
+</section>
+
+<!-- for the trash -->
+<div ondrop="drop(event)" ondragover="allowDrop(event)">
+<img id="trash" src="images/closedTrash.png" ondragover="changeTrash('opened')" onmouseout="changeTrash('closed')" /></div>
+
+<!-- for the rubbishes -->
+<div id="container"></div>
+
+	<script type="text/javascript">
+	
+		var startGame=false;
+        //open and close Trash	
+        (function loadTopFiveScores() {
+			function Pair(key, value) {
+				this.key = key;
+				this.value = value;
+			}
+
+			var allScores = [];
+			for (var prop in localStorage) {
+				allScores.push(new Pair(prop, localStorage[prop]));
+			}
+			//sort scores by time
+			var check=true;
+			while(check===true)
+			{
+				check=false;
+				for (var i = 0; i < allScores.length - 1; i++) {
+					if(allScores[i].value>allScores[i+1].value){
+						var biggerValue = allScores[i];
+						allScores[i] = allScores[i+1];
+						allScores[i+1] = biggerValue;
+						check=true;
+
+					}
+				}
+			}
+			while (allScores.length>5){
+				allScores.pop();
+			}
+						
+			var length;
+			if (allScores.length < 5) {
+				length = allScores.length;
+			}
+			else {
+				length = 5;
+			}
+			var currentBody="";
+			for (var i = 0; i < length; i++) {
+				currentBody+="<tr><td>"+(i+1)+"</td><td>"+allScores[i].key+"</td><td>"+allScores[i].value+"</td></tr>";
+
+			}
+			var rankList = document.getElementsByTagName("tbody")[0];
+			console.log("tbody.parentNode = "+rankList.parentNode);
+			console.log(currentBody);
+			rankList.innerHTML=currentBody;
+
+		})();
+
+		function changeTrash (argument) {
+			trash.src="images/"+argument+"Trash.png";
+			
+		}
+
+		function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("dragged-id",ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("dragged-id");
+            var elementToRemove = document.getElementById(data);
+            var container=document.getElementById("container");
+            container.removeChild(elementToRemove);
+		}
+            	
+		function getRandomNumber(min, max) {
+		  		return Math.floor( Math.random() * (max - min) + min);
+		}
+
+			
+        function onStartGameBtnClick() {
+        	//create random rubbish
+			(function () {
+			    var docFrag= document.createDocumentFragment();
+				for (var i = 0; i < 15; i++) {
+					var img=document.createElement("img");
+					img.style.position="absolute";
+					img.draggable="true";
+					img.className="rubbish";
+					img.style.left=getRandomNumber(270,900)+"px";
+					img.style.top=getRandomNumber(0,500)+"px";;
+					var imgType=getRandomNumber(0,4);
+					switch(imgType){
+						case 0:{
+							img.src="images/beer.jpg";
+							img.id="img"+i;
+							break;
+						}
+						case 1:{
+							img.src="images/coke.jpg";
+							img.id="img"+i;
+							break;
+						}
+						case 2:{
+							img.src="images/fanta.jpg";
+							img.id="img"+i;
+							break;
+						}
+						case 3:{
+							img.src="images/pepsi.jpg";
+							img.id="img"+i;
+							break;
+						}
+					}
+				
+					img.ondragstart=drag;
+					docFrag.appendChild(img);
+				};
+
+				//var container=document.getElementById("container");
+				container.appendChild(docFrag);
+			}());
+
+			
+	        // body...start timer
+	        var timer = document.getElementById("timer");
+
+			var firstDate;
+			var firstDateHours;
+			var firstDateMinutes;
+			var firstDateSeconds;
+
+			var interval;
+
+		    var rubbishes=document.getElementsByClassName('rubbish');
+		    
+		    startTimer();
+	        
+	        function startTimer() {
+					if (!firstDate) {
+						firstDate = new Date();
+						firstDateHours = firstDate.getHours();
+						firstDateMinutes = firstDate.getMinutes();
+						firstDateSeconds = firstDate.getSeconds();
+						interval = setInterval(updateTimer, 100);
+					}
+				}
+
+	        function updateTimer() {
+				var secondDate = new Date();
+				var elapsedHours = secondDate.getHours() - firstDateHours;
+				var elapsedMinutes = secondDate.getMinutes() - firstDateMinutes;
+				var elapsedSeconds = secondDate.getSeconds() - firstDateSeconds;
+
+				if (elapsedHours < 10) {
+					elapsedHours = '0' + elapsedHours;
+				}
+
+				if (elapsedMinutes < 10) {
+					elapsedMinutes = "0" + elapsedMinutes;
+				}
+
+				if (elapsedSeconds < 10) {
+					elapsedSeconds = '0' + elapsedSeconds;
+				}
+
+				timer.innerHTML = elapsedHours + ':' + elapsedMinutes + ':' + elapsedSeconds;
+
+				if (rubbishes.length === 0) {
+					stopTimer();
+
+					var score = timer.innerHTML;
+					saveScore(score);
+				}
+			}
+
+			function stopTimer() {
+				clearInterval(interval);
+			}
+	        		
+			function saveScore(score) {
+				var name = prompt("Enter your name:");
+				if (localStorage[name]) {
+					if (localStorage[name] > score) {
+						localStorage[name]= score;
+					}
+				}
+				else {
+					localStorage[name]=score;
+					
+				}
+
+				document.location.reload(true);
+			}
+		}
+        
+	
+	
+	</script>
+
+</body>
+</html>

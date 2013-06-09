@@ -1,0 +1,83 @@
+<!-- Draw a circle that flies inside a box
+When it reaches an edge, it should bounce that edge -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flying ball</title>
+    
+</head>
+<body onload="onBodyLoad()">
+    <canvas id="canvas" width="600" height="400" style="border-style:solid; border-color:blue;"></canvas>
+    
+    <script>
+        function onBodyLoad() {
+            bouncingBalls.load("canvas");
+        }
+
+        var bouncingBalls = (function () {
+		    var context;
+		    var ball;
+
+		    // charachteristics of the ball.
+		    function Ball(x, y, dx, dy, radius, color) {
+		        this.x = x;
+		        this.y = y;
+		        this.dx = dx;
+		        this.dy = dy;
+		        this.radius = radius;
+		        this.color = color;
+		    }
+		    //create the ball
+		    function addBall(startX, startY, speedX, speedY, radius, color) {
+		       ball = new Ball(startX, startY, speedX, speedY, radius, color);
+		    }
+
+		    function load(canvas) {
+		        canvas = document.getElementById(canvas);
+		        context = canvas.getContext("2d");
+
+		        // Redraw every 20 milliseconds.
+		        setTimeout(drawFrame, 20);
+		    }
+
+		    function drawFrame() {
+		        // Clear the canvas.
+		        context.clearRect(0, 0, canvas.width, canvas.height);
+		        context.beginPath();
+
+		        ball.x += ball.dx;
+		        ball.y += ball.dy;
+
+		        // If the ball has hit the side, bounce it.
+		        if ((ball.x + ball.radius > canvas.width) || (ball.x - ball.radius < 0)) {
+		            ball.dx = -ball.dx;
+		        }
+
+		        // If the ball has hit the bottom, bounce it.
+		        if ((ball.y + ball.radius > canvas.height) || (ball.y - ball.radius < 0)) {
+		            ball.dy = -ball.dy;
+		        }
+
+		        // Draw the ball.
+		        context.fillStyle = ball.color;
+		        context.beginPath();
+		        context.arc(ball.x, ball.y, ball.radius,0,2*Math.PI, false);
+		        context.fill();
+		        
+		        // Draw the next frame in 20 milliseconds.
+		        setTimeout(drawFrame, 20);
+		    }
+
+		    return {
+		        load: load,
+		        addBall: addBall,
+		    };
+		})();
+
+        bouncingBalls.addBall(50, 50, 10, 10, 15, "red");
+       
+
+    </script>
+</body>
+</html>

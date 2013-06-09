@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Drag and drop to trash</title>
+	<style type="text/css">
+		#trash{
+			float:right;
+			width:300px;
+			height:400px;
+		}
+	</style>
+	<script type="text/javascript"></script>
+</head>
+<body>
+<!-- for the trash -->
+<div ondrop="drop(event)" ondragover="allowDrop(event)">
+<img id="trash" src="images/closedTrash.png" ondragover="changeTrash('opened')" onmouseout="changeTrash('closed')" /></div>
+
+<!-- for the rubbishes -->
+<div id="container"></div>
+
+	<script type="text/javascript">
+	//open and close Trash
+		function changeTrash (argument) {
+			trash.src="images/"+argument+"Trash.png";
+			
+		}
+
+		function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("dragged-id",ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("dragged-id");
+            var elementToRemove = document.getElementById(data);
+            var container=document.getElementById("container");
+            container.removeChild(elementToRemove);
+        }
+
+		function getRandomNumber(min, max) {
+		  		return Math.floor( Math.random() * (max - min) + min);
+		}
+
+		//create random rubbish
+		(function () {
+		    var docFrag= document.createDocumentFragment();
+			for (var i = 0; i < 15; i++) {
+				var img=document.createElement("img");
+				img.style.position="absolute";
+				img.draggable="true";
+				img.style.left=getRandomNumber(0,900)+"px";
+				img.style.top=getRandomNumber(0,250)+"px";;
+				var imgType=getRandomNumber(0,4);
+				switch(imgType){
+					case 0:{
+						img.src="images/beer.jpg";
+						img.id="img"+i;
+						break;
+					}
+					case 1:{
+						img.src="images/coke.jpg";
+						img.id="img"+i;
+						break;
+					}
+					case 2:{
+						img.src="images/fanta.jpg";
+						img.id="img"+i;
+						break;
+					}
+					case 3:{
+						img.src="images/pepsi.jpg";
+						img.id="img"+i;
+						break;
+					}
+				}
+			
+			img.ondragstart=drag;
+			docFrag.appendChild(img);
+			
+		};
+		//var container=document.getElementById("container");
+		container.appendChild(docFrag);
+		}());
+
+	
+	
+	</script>
+
+</body>
+</html>
